@@ -54,3 +54,8 @@ def search_directory(query,  directory):
         # else:  File is directory
 
     return results
+
+
+def retrieve(query, index_path, top_k=5):
+    return search_text(query, index_path)[:top_k]
+

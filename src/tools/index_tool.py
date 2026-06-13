@@ -1,9 +1,19 @@
 import json
 import file_tool as ft
-from pdf_tool import get_pdf_text_by_page
+from pdf_tool import read_pdf
 
 
 def build_index(directory, recursive=True, start_id=0):
+
+    def chunk_text(text, chunk_size=1200, overlap=200):
+        start = 0
+        while (start < len(text)):
+            end = start + chunk_size
+            chunk = text[start:end]
+
+            yield chunk
+
+            start += chunk_size - overlap
 
     files = ft.list_contents(directory)
     index = []
@@ -16,31 +26,27 @@ def build_index(directory, recursive=True, start_id=0):
             index.extend(subdir_index)
             continue
         
-        suffix = ft.get_suffix(file)
 
+        suffix = ft.get_suffix(file)
         if suffix == '.pdf':
 
-            pages = get_pdf_text_by_page(file)
-            for page in pages:
+            pdf_text = read_pdf(file)
+            for chunk in chunk_text(pdf_text):
                 index.append({
                     "id": entry_id,
                     "path": str(ft.get_abs_path(file)),
-                    "file": ft.get_name(file),
-                    "page": page["page"],
-                    "text": page["text"]
+                    "text": chunk
                 })
                 entry_id += 1
 
-        elif suffix == '.txt' or suffix == '.md' or suffix == '.json':
+        elif suffix == '.txt' or suffix == '.md':
 
-            lines = ft.get_text_by_line(file)
-            for line in lines:
+            file_text = ft.read_text_file(file)
+            for chunk in chunk_text(file_text):
                 index.append({
                     "id": entry_id,
                     "path": str(ft.get_abs_path(file)),
-                    "file": ft.get_name(file),
-                    "line": line["lineno"],
-                    "text": line["text"]
+                    "text": chunk
                 })
                 entry_id += 1
 

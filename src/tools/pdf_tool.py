@@ -1,5 +1,4 @@
 from pypdf import PdfReader
-# import json
 
 def read_pdf(path):
     reader = PdfReader(path)
@@ -27,7 +26,6 @@ def get_pdf_text_by_page(path):
     for page in pages:
         page_dir = {"page": page_num, "text": page.extract_text()}
         text_by_page.append(page_dir)
-        # text_by_page.append(json.dumps(page_dir))
         page_num = page_num + 1
     
     return text_by_page
