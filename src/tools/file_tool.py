@@ -70,3 +70,7 @@ def move(src, dst):
     """
     shutil.move(src, dst)
 
+def remove(path):
+    p = Path(path)
+    p.unlink(missing_ok=True)
+

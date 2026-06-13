@@ -19,9 +19,6 @@ def search_text(query, index_path, file=None):
         
     return results
 
-result = search_text("purp", "index.json")
-print('\n'.join(str(dic) for dic in result))
-
 def search_pdf(query, pdf):
     results = []
 
