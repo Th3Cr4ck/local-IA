@@ -1,6 +1,6 @@
 import json
-import file_tool as ft
-from pdf_tool import read_pdf
+from . import file_tool as ft
+from .pdf_tool import read_pdf
 
 
 def build_index(directory, recursive=True, start_id=0):

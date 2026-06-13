@@ -1,6 +1,6 @@
-from index_tool import load_index
-from pdf_tool import get_pdf_text_by_page
-import file_tool as ft
+from .index_tool import load_index
+from .pdf_tool import get_pdf_text_by_page
+from . import file_tool as ft
 
 
 def search_text(query, index_path, file=None):
