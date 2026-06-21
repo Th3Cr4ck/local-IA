@@ -1,30 +1,26 @@
 from .search_tool import retrieve
 from ollama import generate
 
-def build_prompt(context, query='', look_for=''):
+def build_prompt(context, query):
     prompt = ""
 
-    if query == '' and look_for == '':
-        return ''
-
     if query == '':
-        prompt = f"""Contexto: {context}
-        Responde solo con la informacion del contexto que te acabo de dar, nada mas,
-        dame toda la informacion que hayas podido recopilar de: {look_for}
-        """
+        return 'Indicame que mi query esta vacio.'
     else:
         prompt = f"""Contexto: {context}
         Responde solo con la informacion del contexto que te acabo de dar, nada mas.
         {query}
+        Si el contexto contiene información suficiente, responde de manera directa. Puedes utilizar sinónimos y relacionar conceptos equivalentes siempre que la relación esté explícitamente sustentada en el contexto.
+        Si realmente no existe información relevante en el contexto, responde unicamente:
+        'No tengo suficiente contexto para responder la pregunta.'
         """
-    prompt += " Te recuerdo que solo uses la informacion que te paso como contexto. Si no tienes suficiente contexto dilo y no respondas la pregunta"
     return prompt
 
-def answer_question(index_path, look_for, query=""):
+def answer_question(index_path, query):
 
-    chunks = retrieve(look_for, index_path)
+    chunks = retrieve(query, index_path)
 
-    prompt = build_prompt(chunks, query, look_for)
+    prompt = build_prompt(chunks, query)
     print(prompt)
 
     stream = generate(
@@ -36,10 +32,10 @@ def answer_question(index_path, look_for, query=""):
     for chunk in stream:
         yield chunk['response']
 
-def answer_question_verbose(index_path, look_for, query="", top_k=5):
-    chunks = retrieve(look_for, index_path, top_k)
+def answer_question_verbose(index_path, query, top_k=5):
+    chunks = retrieve(query, index_path, top_k)
 
-    prompt = build_prompt(chunks, query, look_for)
+    prompt = build_prompt(chunks, query)
     print(prompt)
 
     stream = generate(
