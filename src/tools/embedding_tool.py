@@ -13,7 +13,7 @@ def generate_embeddings(texts):
 
 def enrich_index(index):
     texts = [
-        entry["text"]
+        (entry["text"], entry["file"])
         for entry in index
     ]
 

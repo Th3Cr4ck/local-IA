@@ -1,6 +1,5 @@
 import json
 
-from torch import embedding
 from . import file_tool as ft
 from .pdf_tool import read_pdf
 
@@ -37,6 +36,7 @@ def build_index(directory, recursive=True, start_id=0):
                 index.append({
                     "id": entry_id,
                     "path": str(ft.get_abs_path(file)),
+                    "file": str(ft.get_name(file)),
                     "text": chunk,
                 })
                 entry_id += 1
@@ -48,6 +48,7 @@ def build_index(directory, recursive=True, start_id=0):
                 index.append({
                     "id": entry_id,
                     "path": str(ft.get_abs_path(file)),
+                    "file": str(ft.get_name(file)),
                     "text": chunk,
                 })
                 entry_id += 1
